@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Row.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid</a> &gt; <span class="el_source">Row.java</span></div><h1>Row.java</h1><pre class="source lang-java linenums">package comp3111.covid;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import javafx.beans.property.SimpleStringProperty;
 /**
  * A Class to contain key information in one object
@@ -8,12 +11,12 @@ import javafx.beans.property.SimpleStringProperty;
 public class Row {
 	private final SimpleStringProperty country;
     private final SimpleStringProperty date;
-<span class="fc" id="L11">    private Long totalCases = (long) -1;</span>
-<span class="fc" id="L12">    private Double totalCasesPerM = -1.0;</span>
-<span class="fc" id="L13">    private Long totalDeaths = (long) 0;</span>
-<span class="fc" id="L14">    private Double totalDeathsPerM = -1.0;</span>
-<span class="fc" id="L15">    private Long totalVaccinated = (long) 0;</span>
-<span class="fc" id="L16">    private Double vaccinationRate = -1.0;</span>
+<span class="fc" id="L14">    private Long totalCases = (long) -1;</span>
+<span class="fc" id="L15">    private Double totalCasesPerM = -1.0;</span>
+<span class="fc" id="L16">    private Long totalDeaths = (long) 0;</span>
+<span class="fc" id="L17">    private Double totalDeathsPerM = -1.0;</span>
+<span class="fc" id="L18">    private Long totalVaccinated = (long) 0;</span>
+<span class="fc" id="L19">    private Double vaccinationRate = -1.0;</span>
     
     /**
      * Default Constructor
@@ -21,18 +24,18 @@ public class Row {
      * @param _country String type country name.
      * @param _date String type date in &quot;M/d/yyyy&quot; format.
      */
-<span class="fc" id="L24">    public Row(String _country, String _date) {</span>
-<span class="fc" id="L25">    	this.country = new SimpleStringProperty(_country);</span>
-<span class="fc" id="L26">        this.date = new SimpleStringProperty(_date);</span>
+<span class="fc" id="L27">    public Row(String _country, String _date) {</span>
+<span class="fc" id="L28">    	this.country = new SimpleStringProperty(_country);</span>
+<span class="fc" id="L29">        this.date = new SimpleStringProperty(_date);</span>
         
-<span class="fc" id="L28">	}</span>
+<span class="fc" id="L31">	}</span>
     
     /**
      * This function returns instances' country attribute
      * @return Return a String type country attribute.
      */
     public String getCountry() {
-<span class="fc" id="L35">        return country.get();</span>
+<span class="fc" id="L38">        return country.get();</span>
     }
     
     /**
@@ -40,15 +43,15 @@ public class Row {
      * @param _country String type country name.
      */
     public void setCountry(String _country) {
-<span class="fc" id="L43">        country.set(_country);</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L46">        country.set(_country);</span>
+<span class="fc" id="L47">    }</span>
     
     /**
      * This function returns instances' date attribute
      * @return Return a String type date attribute in &quot;M/d/yyyy&quot; format.
      */
     public String getDate() {
-<span class="fc" id="L51">        return date.get();</span>
+<span class="fc" id="L54">        return date.get();</span>
     }
     
     /**
@@ -56,15 +59,15 @@ public class Row {
      * @param _date String type date in &quot;M/d/yyyy&quot; format.
      */
     public void setDate(String _date) {
-<span class="fc" id="L59">        country.set(_date);</span>
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L62">        country.set(_date);</span>
+<span class="fc" id="L63">    }</span>
     
     /**
      * This function returns total cases.
      * @return Return a Long type of total cases.
      */
     public Long getTotalCases() {
-<span class="fc" id="L67">        return this.totalCases;</span>
+<span class="fc" id="L70">        return this.totalCases;</span>
     }
     
     /**
@@ -72,15 +75,15 @@ public class Row {
      * @param _totalCases Long type.
      */
     public void setTotalCases(Long _totalCases) {
-<span class="fc" id="L75">        totalCases = _totalCases;</span>
-<span class="fc" id="L76">    }</span>
+<span class="fc" id="L78">        totalCases = _totalCases;</span>
+<span class="fc" id="L79">    }</span>
     
     /**
      * This function returns total cases per million.
      * @return Return a Double type of total cases per million.
      */
     public Double getTotalCasesPerM() {
-<span class="fc" id="L83">    	return this.totalCasesPerM;</span>
+<span class="fc" id="L86">    	return this.totalCasesPerM;</span>
     }
     
     /**
@@ -88,15 +91,15 @@ public class Row {
      * @param _totalCasesPerM Double type.
      */
     public void setTotalCasesPerM(Double _totalCasesPerM) {
-<span class="fc" id="L91">    	totalCasesPerM = _totalCasesPerM;</span>
-<span class="fc" id="L92">    }</span>
+<span class="fc" id="L94">    	totalCasesPerM = _totalCasesPerM;</span>
+<span class="fc" id="L95">    }</span>
     
     /**
      * This function returns total deaths.
      * @return Return a Long type of total deaths.
      */
     public Long getTotalDeaths() {
-<span class="fc" id="L99">        return this.totalDeaths;</span>
+<span class="fc" id="L102">        return this.totalDeaths;</span>
     }
 
     /**
@@ -104,15 +107,15 @@ public class Row {
      * @param _totalDeaths Long type.
      */
     public void setTotalDeaths(Long _totalDeaths) {
-<span class="fc" id="L107">        totalDeaths = _totalDeaths;</span>
-<span class="fc" id="L108">    }</span>
+<span class="fc" id="L110">        totalDeaths = _totalDeaths;</span>
+<span class="fc" id="L111">    }</span>
     
     /**
      * This function returns total deaths per million.
      * @return Return a Double type of total deaths per million.
      */
     public Double getTotalDeathsPerM() {
-<span class="fc" id="L115">    	return this.totalDeathsPerM;</span>
+<span class="fc" id="L118">    	return this.totalDeathsPerM;</span>
     }
     
     /**
@@ -120,15 +123,15 @@ public class Row {
      * @param _totalDeathsPerM Double type.
      */
     public void setTotalDeathsPerM(Double _totalDeathsPerM) {
-<span class="fc" id="L123">    	totalDeathsPerM = _totalDeathsPerM;</span>
-<span class="fc" id="L124">    }</span>
+<span class="fc" id="L126">    	totalDeathsPerM = _totalDeathsPerM;</span>
+<span class="fc" id="L127">    }</span>
     
     /**
      * This function returns total fully vaccinated.
      * @return Return a Long type of total fully vaccinated.
      */
     public Long getTotalVaccinated() {
-<span class="fc" id="L131">        return this.totalVaccinated;</span>
+<span class="fc" id="L134">        return this.totalVaccinated;</span>
     }
     
     /**
@@ -136,15 +139,15 @@ public class Row {
      * @param _totalVaccinated Long type.
      */
     public void setTotalVaccinated(Long _totalVaccinated) {
-<span class="fc" id="L139">    	totalVaccinated = _totalVaccinated;</span>
-<span class="fc" id="L140">    }</span>
+<span class="fc" id="L142">    	totalVaccinated = _totalVaccinated;</span>
+<span class="fc" id="L143">    }</span>
     
     /**
      * This function returns rate of fully vaccinated.
      * @return Return a Double type rate of fully vaccinated.
      */
     public Double getVaccinationRate() {
-<span class="fc" id="L147">    	return this.vaccinationRate;</span>
+<span class="fc" id="L150">    	return this.vaccinationRate;</span>
     }
     
     /**
@@ -153,24 +156,24 @@ public class Row {
      * @param population Double type of population count.
      */
     public void setVaccinationRate(Long fullyVaccinated, Double population) {
-<span class="fc bfc" id="L156" title="All 2 branches covered.">    	if(fullyVaccinated == -1) {</span>
-<span class="fc" id="L157">    		vaccinationRate  = (double) -1;</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">    	if(fullyVaccinated == -1) {</span>
+<span class="fc" id="L160">    		vaccinationRate  = (double) -1;</span>
     	}
     	else {
-<span class="fc" id="L160">        	vaccinationRate = 100*fullyVaccinated/population;</span>
+<span class="fc" id="L163">        	vaccinationRate = 100*fullyVaccinated/population;</span>
     	}
-<span class="fc" id="L162">    }</span>
+<span class="fc" id="L165">    }</span>
     /**
      * This functions is for generating Tables only
      * This function converts a null output from total cases into a string saying &quot;No record on this date&quot; or the total cases values in String type otherwise.
      * @return Return a string to be output on the table 
      */
     public String getTotalCasesTable() {
-<span class="fc bfc" id="L169" title="All 2 branches covered.">        if(this.totalCases == -1) {</span>
-<span class="fc" id="L170">        	return &quot;No record on this date&quot;;</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        if(this.totalCases == -1) {</span>
+<span class="fc" id="L173">        	return &quot;No record on this date&quot;;</span>
         }
         else {
-<span class="fc" id="L173">        	return this.totalCases.toString();</span>
+<span class="fc" id="L176">        	return this.totalCases.toString();</span>
         }
     }
     /**
@@ -179,11 +182,11 @@ public class Row {
      * @return Return a string to be output on the table 
      */
     public String getTotalCasesPerMTable() {
-<span class="fc bfc" id="L182" title="All 2 branches covered.">        if(this.totalCasesPerM == -1) {</span>
-<span class="fc" id="L183">        	return &quot;No record on this date&quot;;</span>
+<span class="fc bfc" id="L185" title="All 2 branches covered.">        if(this.totalCasesPerM == -1) {</span>
+<span class="fc" id="L186">        	return &quot;No record on this date&quot;;</span>
         }
         else {
-<span class="fc" id="L186">        	return this.totalCasesPerM.toString();</span>
+<span class="fc" id="L189">        	return this.totalCasesPerM.toString();</span>
         }
     }
     /**
@@ -192,11 +195,11 @@ public class Row {
      * @return Return a string to be output on the table 
      */
     public String getTotalDeathsTable() {
-<span class="fc bfc" id="L195" title="All 2 branches covered.">        if(this.totalDeaths == -1) {</span>
-<span class="fc" id="L196">        	return &quot;No record on this date&quot;;</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">        if(this.totalDeaths == -1) {</span>
+<span class="fc" id="L199">        	return &quot;No record on this date&quot;;</span>
         }
         else {
-<span class="fc" id="L199">        	return this.totalDeaths.toString();</span>
+<span class="fc" id="L202">        	return this.totalDeaths.toString();</span>
         }
     }
     /**
@@ -205,11 +208,11 @@ public class Row {
      * @return Return a string to be output on the table 
      */
     public String getTotalDeathsPerMTable() {
-<span class="fc bfc" id="L208" title="All 2 branches covered.">        if(this.totalDeathsPerM == -1) {</span>
-<span class="fc" id="L209">        	return &quot;No record on this date&quot;;</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        if(this.totalDeathsPerM == -1) {</span>
+<span class="fc" id="L212">        	return &quot;No record on this date&quot;;</span>
         }
         else {
-<span class="fc" id="L212">        	return this.totalDeathsPerM.toString();</span>
+<span class="fc" id="L215">        	return this.totalDeathsPerM.toString();</span>
         }
     }
     /**
@@ -218,11 +221,11 @@ public class Row {
      * @return Return a string to be output on the table 
      */
     public String getTotalVaccinatedTable() {
-<span class="fc bfc" id="L221" title="All 2 branches covered.">        if(this.totalVaccinated == -1) {</span>
-<span class="fc" id="L222">        	return &quot;No record on this date&quot;;</span>
+<span class="fc bfc" id="L224" title="All 2 branches covered.">        if(this.totalVaccinated == -1) {</span>
+<span class="fc" id="L225">        	return &quot;No record on this date&quot;;</span>
         }
         else {
-<span class="fc" id="L225">        	return this.totalVaccinated.toString();</span>
+<span class="fc" id="L228">        	return this.totalVaccinated.toString();</span>
         }
     }
     /**
@@ -231,11 +234,13 @@ public class Row {
      * @return Return a string to be output on the table 
      */
     public String getVaccinationRateTable() {
-<span class="fc bfc" id="L234" title="All 2 branches covered.">        if(this.vaccinationRate == -1) {</span>
-<span class="fc" id="L235">        	return &quot;No record on this date&quot;;</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">        if(this.vaccinationRate == -1) {</span>
+<span class="fc" id="L238">        	return &quot;No record on this date&quot;;</span>
         }
         else {
-<span class="fc" id="L238">        	return this.vaccinationRate.toString();</span>
+<span class="fc" id="L241">            BigDecimal bd = new BigDecimal(this.vaccinationRate).setScale(2, RoundingMode.HALF_UP);</span>
+<span class="fc" id="L242">            Double result = bd.doubleValue();</span>
+<span class="fc" id="L243">        	return result.toString() + '%';</span>
         }
     }
     
