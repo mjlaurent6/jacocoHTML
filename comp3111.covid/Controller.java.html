@@ -1,0 +1,1003 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Controller.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid</a> &gt; <span class="el_source">Controller.java</span></div><h1>Controller.java</h1><pre class="source lang-java linenums">package comp3111.covid;
+
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
+
+import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+//import java.util.function.Predicate;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.sql.rowset.Predicate;
+
+import javafx.event.ActionEvent;
+
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
+
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.CheckMenuItem;
+
+import javafx.scene.control.Tab;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.util.Callback;
+import javafx.scene.control.ChoiceBox;
+
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.CustomMenuItem;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.SelectionMode;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.util.*;
+import javafx.collections.*;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+
+/**
+ * A Class that handles the user interface of the program
+ */
+<span class="nc" id="L72">public class Controller implements Initializable {</span>
+
+	@FXML
+	private Tab tabTaskZero;
+
+	@FXML
+	private TextField textfieldISO;
+
+	@FXML
+	private Button buttonConfirmedDeaths;
+
+	@FXML
+	private TextField textfieldDataset;
+
+	@FXML
+	private Button buttonRateOfVaccination;
+
+	@FXML
+	private Button buttonConfirmedCases;
+
+	@FXML
+	private Tab tabReport1;
+
+	@FXML
+	private Tab tabReport2;
+
+	@FXML
+	private Tab tabReport3;
+
+	@FXML
+	private Tab tabApp1;
+
+	@FXML
+	private Tab tabApp2;
+
+	@FXML
+	private Tab tabApp3;
+
+	@FXML
+	private TextArea textAreaConsole;
+
+	@FXML
+	private MenuButton menuButtonA;
+
+	@FXML
+	private DatePicker dateA;
+
+	@FXML
+	private TableView&lt;Row&gt; tableA;
+
+	@FXML
+	private TableView&lt;Row&gt; tableB;
+
+	@FXML
+	private TableView&lt;Row&gt; tableC;
+
+	@FXML
+	private Button ButtonA1;
+
+	@FXML
+	private Button ButtonA2;
+
+	@FXML
+	private Button ButtonB1;
+
+	@FXML
+	private Button ButtonB2;
+
+	@FXML
+	private Button ButtonC1;
+
+	@FXML
+	private Button ButtonC2;
+
+	@FXML
+	private DatePicker endDateA;
+
+	@FXML
+	private DatePicker endDateB;
+
+	@FXML
+	private DatePicker endDateC;
+
+	@FXML
+	private DatePicker dateB;
+
+	@FXML
+	private DatePicker dateC;
+
+	@FXML
+	private MenuButton menuButtonA1;
+
+	@FXML
+	private MenuButton menuButtonA2;
+
+	@FXML
+	private MenuButton menuButtonB1;
+
+	@FXML
+	private MenuButton menuButtonB2;
+
+	@FXML
+	private MenuButton menuButtonC1;
+
+	@FXML
+	private MenuButton menuButtonC2;
+
+	@FXML
+	private DatePicker startDateA;
+
+	@FXML
+	private DatePicker startDateB;
+
+	@FXML
+	private DatePicker startDateC;
+
+	@FXML
+	private Label tableTitleA;
+
+	@FXML
+	private Label tableTitleB;
+
+	@FXML
+	private Label tableTitleC;
+	
+	@FXML
+
+	private Label chartTitleA;
+
+	@FXML
+	private Label chartTitleB;
+
+	@FXML
+	private Label chartTitleC;
+	
+	@FXML
+	private Label statusLabel;
+	
+	@FXML
+	private CategoryAxis xAxisA;
+	
+	@FXML
+	private CategoryAxis xAxisB;
+	
+	@FXML
+	private CategoryAxis xAxisC;
+	
+	@FXML
+	private NumberAxis yAxis;
+	
+	@FXML
+	private LineChart &lt;String,Number&gt; ChartA;
+	
+	@FXML
+	private LineChart &lt;String,Number&gt; ChartB;
+	
+	@FXML
+	private LineChart &lt;String,Number&gt; ChartC;
+	
+	@FXML
+	private TextField searchA1;
+	
+	@FXML
+	private TextField searchB1;
+	
+	@FXML
+	private TextField searchC1;
+	
+	@FXML
+	private TextArea tableConsoleA;
+	
+	@FXML
+	private TextArea tableConsoleB;
+	
+	@FXML
+	private TextArea tableConsoleC;
+	
+	@FXML
+	private TextArea chartConsoleA;
+	
+	@FXML
+	private TextArea chartConsoleB;
+	
+	@FXML
+	private TextArea chartConsoleC;
+
+<span class="nc" id="L258">	final ObservableList&lt;Row&gt; dataA1 = FXCollections.observableArrayList();</span>
+<span class="nc" id="L259">	final ObservableList&lt;Row&gt; dataB1 = FXCollections.observableArrayList();</span>
+<span class="nc" id="L260">	final ObservableList&lt;Row&gt; dataC1 = FXCollections.observableArrayList();</span>
+	
+<span class="nc" id="L262">	HashMap&lt;String, HashMap&lt;String, Row&gt;&gt; godData = new HashMap&lt;String, HashMap&lt;String, Row&gt;&gt;();</span>
+	
+		
+	/**
+	 * A function that provides data to the generated table based on the selected countries and selected date that is triggered once the generate confirmed cases table button is pressed by the user
+	 * @param event Task A1 To be triggered by the &quot;Generate Confirmed Cases Table&quot; button on the Table A Tab
+	 * The function will also output text in the console listing countries not in the dataset for the specified selected date
+	 */
+	@FXML
+	void doConfirmedCasesTable(ActionEvent event) {
+		// Finding selected countries
+<span class="nc" id="L273">		Set&lt;String&gt; selectedCountries = new HashSet&lt;String&gt;();</span>
+
+		// iterate through the menu items and store selected countries in set
+<span class="nc" id="L276">		menuButtonA1.getItems().forEach((menuItem) -&gt; {</span>
+<span class="nc" id="L277">			CheckBox cb = (CheckBox) ((CustomMenuItem) menuItem).getContent();</span>
+<span class="nc bnc" id="L278" title="All 2 branches missed.">			if (cb.isSelected()) {</span>
+<span class="nc" id="L279">				selectedCountries.add(cb.getText());</span>
+			}
+<span class="nc" id="L281">		});</span>
+		
+		
+		// Finding selected date
+<span class="nc" id="L285">		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;M/d/yyyy&quot;);</span>
+<span class="nc" id="L286">		String selectedDate = dateA.getValue().format(formatter);</span>
+
+
+		// Change the title of the table
+<span class="nc" id="L290">		tableTitleA.setText(&quot;Number of Confirmed COVID-19 Cases as of &quot; + selectedDate);</span>
+
+		// clear the table for new dat
+<span class="nc" id="L293">		dataA1.clear();</span>
+		
+<span class="nc bnc" id="L295" title="All 2 branches missed.">		if(selectedCountries.size() == 0) {</span>
+<span class="nc" id="L296">			System.out.println(&quot;No country is selected&quot;);</span>
+		}
+		
+<span class="nc" id="L299">		String console = &quot;&quot;;</span>
+<span class="nc bnc" id="L300" title="All 2 branches missed.">		if(selectedCountries.size() == 0) {</span>
+<span class="nc" id="L301">			console += &quot;No country is selected&quot;;</span>
+<span class="nc" id="L302">			tableConsoleA.setText(console);</span>
+<span class="nc" id="L303">			return;</span>
+		}
+		
+<span class="nc" id="L306">		console += &quot;Countries with missing dates: \n&quot;;</span>
+		
+<span class="nc bnc" id="L308" title="All 2 branches missed.">		for (String country: selectedCountries) {</span>
+<span class="nc bnc" id="L309" title="All 2 branches missed.">			if(godData.get(country).containsKey(selectedDate) == true) {</span>
+<span class="nc" id="L310">				dataA1.add(godData.get(country).get(selectedDate));</span>
+			} else {
+<span class="nc" id="L312">				console += country + &quot; &quot; + selectedDate + &quot;\n&quot;;</span>
+			}
+<span class="nc" id="L314">		}</span>
+		
+		//setting the text in the console
+<span class="nc" id="L317">		tableConsoleA.setText(console);</span>
+		
+<span class="nc" id="L319">	}</span>
+
+	/**
+	 * A function that provides data to the generated table based on the selected countries and selected date that is triggered once the generate confirmed deaths table button is pressed by the user
+	 * @param event Task B1 To be triggered by the &quot;Generate Confirmed Deaths Table&quot; button on the Table B Tab
+	 * The function will also output text in the console listing countries not in the dataset for the specified selected date
+	 */
+	@FXML
+	void doConfirmedDeathsTable(ActionEvent event) {
+		// Finding selected countries
+<span class="nc" id="L329">		Set&lt;String&gt; selectedCountries = new HashSet&lt;String&gt;();</span>
+
+<span class="nc" id="L331">		menuButtonB1.getItems().forEach((menuItem) -&gt; {</span>
+<span class="nc" id="L332">			CheckBox cb = (CheckBox) ((CustomMenuItem) menuItem).getContent();</span>
+<span class="nc bnc" id="L333" title="All 2 branches missed.">			if (cb.isSelected()) {</span>
+<span class="nc" id="L334">				selectedCountries.add(cb.getText());</span>
+			}
+<span class="nc" id="L336">		});</span>
+
+		// Finding selected date
+<span class="nc" id="L339">		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;M/d/yyyy&quot;);</span>
+<span class="nc" id="L340">		String selectedDate = dateB.getValue().format(formatter);</span>
+		// Change the title of the table
+<span class="nc" id="L342">		tableTitleB.setText(&quot;Number of Confirmed COVID-19 Deaths as of &quot; + selectedDate.toString());</span>
+
+		// clear the table for new data
+<span class="nc" id="L345">		dataB1.clear();</span>
+		
+<span class="nc bnc" id="L347" title="All 2 branches missed.">		if(selectedCountries.size() == 0) {</span>
+<span class="nc" id="L348">			System.out.println(&quot;No country is selected&quot;);</span>
+		}
+		
+<span class="nc" id="L351">		String console = &quot;&quot;;</span>
+<span class="nc bnc" id="L352" title="All 2 branches missed.">		if(selectedCountries.size() == 0) {</span>
+<span class="nc" id="L353">			console += &quot;No country is selected&quot;;</span>
+<span class="nc" id="L354">			tableConsoleB.setText(console);</span>
+<span class="nc" id="L355">			return;</span>
+		}
+<span class="nc" id="L357">		console += &quot;Countries with missing dates: \n&quot;;</span>
+		
+<span class="nc bnc" id="L359" title="All 2 branches missed.">		for (String country : selectedCountries) {</span>
+<span class="nc bnc" id="L360" title="All 2 branches missed.">			if(godData.get(country).containsKey(selectedDate) == true) {</span>
+<span class="nc" id="L361">				dataB1.add(godData.get(country).get(selectedDate));</span>
+			} else {
+<span class="nc" id="L363">				console += country + &quot; &quot; + selectedDate + &quot;\n&quot;;</span>
+			}
+<span class="nc" id="L365">		}</span>
+		
+<span class="nc" id="L367">		tableConsoleB.setText(console);</span>
+<span class="nc" id="L368">	}</span>
+	/**
+	 * A function that provides data to the generated table based on the selected countries and selected date that is triggered once the generate vaccination rate table button is pressed by the user
+	 * @param event Task C1 To be triggered by the &quot;Confirmed Vaccination Table&quot; button on the Table C Tab
+	 * The function will also output text in the console listing countries not in the dataset for the specified selected date
+	 */
+	@FXML
+	void doConfirmedVaccinationTable(ActionEvent event) {
+		// Finding selected countries
+<span class="nc" id="L377">		Set&lt;String&gt; selectedCountries = new HashSet&lt;String&gt;();</span>
+
+		// iterate through the menu items and store selected countries in set
+<span class="nc" id="L380">		menuButtonC1.getItems().forEach((menuItem) -&gt; {</span>
+<span class="nc" id="L381">			CheckBox cb = (CheckBox) ((CustomMenuItem) menuItem).getContent();</span>
+<span class="nc bnc" id="L382" title="All 2 branches missed.">			if (cb.isSelected()) {</span>
+<span class="nc" id="L383">				selectedCountries.add(cb.getText());</span>
+			}
+<span class="nc" id="L385">		});</span>
+
+		// Finding selected date
+<span class="nc" id="L388">		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;M/d/yyyy&quot;);</span>
+<span class="nc" id="L389">		String selectedDate = dateC.getValue().format(formatter);</span>
+		// Change the title of the table
+<span class="nc" id="L391">		tableTitleC.setText(&quot;Number of Confirmed COVID-19 Cases as of &quot; + selectedDate.toString());</span>
+
+		// clear the table for new data
+<span class="nc" id="L394">		dataC1.clear();</span>
+		
+<span class="nc bnc" id="L396" title="All 2 branches missed.">		if(selectedCountries.size() == 0) {</span>
+<span class="nc" id="L397">			System.out.println(&quot;No country is selected&quot;);</span>
+		}
+		
+<span class="nc" id="L400">		String console = &quot;&quot;;</span>
+<span class="nc bnc" id="L401" title="All 2 branches missed.">		if(selectedCountries.size() == 0) {</span>
+<span class="nc" id="L402">			console += &quot;No country is selected&quot;;</span>
+<span class="nc" id="L403">			tableConsoleC.setText(console);</span>
+<span class="nc" id="L404">			return;</span>
+		}
+<span class="nc" id="L406">		console += &quot;Countries with missing dates: \n&quot;;</span>
+		
+<span class="nc bnc" id="L408" title="All 2 branches missed.">		for (String country : selectedCountries) {</span>
+<span class="nc bnc" id="L409" title="All 2 branches missed.">			if(godData.get(country).containsKey(selectedDate) == true) {</span>
+<span class="nc" id="L410">				dataC1.add(godData.get(country).get(selectedDate));</span>
+			} else {
+<span class="nc" id="L412">				console += country + &quot; &quot; + selectedDate + &quot;\n&quot;;</span>
+			}
+<span class="nc" id="L414">		}</span>
+		
+<span class="nc" id="L416">		tableConsoleC.setText(console);</span>
+<span class="nc" id="L417">	}</span>
+	/**
+	 * 
+	 * A class for the extra feature that allows the user to interact with the chart using the mouse cursor
+	 * The class sets the size of the data nodes and the interface appearance after the user's cursor is hovering over a data node
+	 *
+	 */
+	class HoveredThresholdNode extends StackPane {
+<span class="nc" id="L425">	    HoveredThresholdNode(int value) {</span>
+<span class="nc" id="L426">	      setPrefSize(5, 5);</span>
+
+<span class="nc" id="L428">	      final Label label = createDataThresholdLabel(value);</span>
+
+<span class="nc" id="L430">	      setOnMouseEntered(new EventHandler&lt;MouseEvent&gt;() {</span>
+	        @Override public void handle(MouseEvent mouseEvent) {
+<span class="nc" id="L432">	          getChildren().setAll(label);</span>
+<span class="nc" id="L433">	          setCursor(Cursor.NONE);</span>
+<span class="nc" id="L434">	          toFront();</span>
+<span class="nc" id="L435">	        }</span>
+	      });
+<span class="nc" id="L437">	      setOnMouseExited(new EventHandler&lt;MouseEvent&gt;() {</span>
+	        @Override public void handle(MouseEvent mouseEvent) {
+<span class="nc" id="L439">	          getChildren().clear();</span>
+<span class="nc" id="L440">	          setCursor(Cursor.CROSSHAIR);</span>
+<span class="nc" id="L441">	        }</span>
+	      });
+<span class="nc" id="L443">	    }</span>
+
+	    private Label createDataThresholdLabel(int value) {
+<span class="nc" id="L446">	      final Label label = new Label(value + &quot;&quot;);</span>
+<span class="nc" id="L447">	      label.getStyleClass().addAll(&quot;default-color0&quot;, &quot;chart-line-symbol&quot;, &quot;chart-series-line&quot;);</span>
+<span class="nc" id="L448">	      label.setStyle(&quot;-fx-font-size: 13; -fx-font-weight: bold;&quot;);</span>
+
+<span class="nc" id="L450">	      label.setTextFill(Color.FORESTGREEN);</span>
+
+<span class="nc" id="L452">	      label.setMinSize(Label.USE_PREF_SIZE, Label.USE_PREF_SIZE);</span>
+<span class="nc" id="L453">	      return label;</span>
+	    }
+	  }
+	/**
+	 * A function that provides data to the generated chart based on the selected countries and selected date range that is triggered once the generate confirmed cases chart button is pressed by the user
+	 * @param event Task A2 to be triggered by the button &quot;Generate Confirmed Cases Chart&quot; on the Chart A Tab
+	 * The function will also output text in the console listing countries not in the dataset for the specified selected date range
+	 * Note: Legend of up to 10 countries can only be shown although more than 10 countries can be displayed on the chart
+	 */
+	@FXML
+	void doConfirmedCasesChart(ActionEvent event) {
+		// Finding selected countries
+<span class="nc" id="L465">		Set&lt;String&gt; selectedCountries = new HashSet&lt;String&gt;();</span>
+<span class="nc" id="L466">		ObservableList&lt;String&gt; dateRange = FXCollections.observableArrayList();</span>
+		// clear the Chart for new data		
+
+<span class="nc" id="L469">		ChartA.getData().clear();</span>
+
+		// iterate through the menu items and store selected countries in set
+<span class="nc" id="L472">		menuButtonA2.getItems().forEach((menuItem) -&gt; {</span>
+<span class="nc" id="L473">			CheckBox cb = (CheckBox) ((CustomMenuItem) menuItem).getContent();</span>
+<span class="nc bnc" id="L474" title="All 2 branches missed.">			if (cb.isSelected()) {</span>
+<span class="nc" id="L475">				selectedCountries.add(cb.getText());</span>
+			}
+<span class="nc" id="L477">		});</span>
+		
+		// Finding selected date
+<span class="nc" id="L480">		LocalDate startDate = startDateA.getValue();</span>
+<span class="nc" id="L481">		LocalDate endDate = endDateA.getValue();</span>
+
+
+<span class="nc bnc" id="L484" title="All 2 branches missed.">		for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(1)) {</span>
+<span class="nc" id="L485">			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;M/d/yyyy&quot;);</span>
+<span class="nc" id="L486">			String selectedDate = date.format(formatter);</span>
+<span class="nc" id="L487">			dateRange.add(selectedDate);</span>
+		}
+		
+<span class="nc bnc" id="L490" title="All 2 branches missed.">		if(selectedCountries.size() == 0) {</span>
+<span class="nc" id="L491">			System.out.println(&quot;No country is selected&quot;);</span>
+		}
+		
+<span class="nc" id="L494">		String console = &quot;&quot;;</span>
+<span class="nc bnc" id="L495" title="All 2 branches missed.">		if(endDate.isBefore(startDate)) {</span>
+<span class="nc" id="L496">			console += &quot;Please select an end date after/at start date&quot;;</span>
+<span class="nc" id="L497">			chartConsoleA.setText(console);</span>
+<span class="nc" id="L498">			return;</span>
+		}
+<span class="nc bnc" id="L500" title="All 2 branches missed.">		if(selectedCountries.size() == 0) {</span>
+<span class="nc" id="L501">			console += &quot;No country is selected&quot;;</span>
+<span class="nc" id="L502">			chartConsoleA.setText(console);</span>
+<span class="nc" id="L503">			return;</span>
+		}
+
+<span class="nc" id="L506">		console += &quot;Countries with missing dates: \n&quot;;</span>
+		
+<span class="nc" id="L508">		chartConsoleA.setText(console);</span>
+		
+<span class="nc" id="L510">		xAxisA.setAutoRanging(true);</span>
+<span class="nc" id="L511">		xAxisA.setCategories(dateRange);</span>
+		
+<span class="nc" id="L513">		ChartA.setTitle(&quot;Cumulative Confirmed COVID-19 Cases (per 1M)&quot;);</span>
+
+		// clear the table for new data
+<span class="nc" id="L516">		ChartA.setCreateSymbols(false);</span>
+<span class="nc" id="L517">		ChartA.setAnimated(false);</span>
+		
+<span class="nc bnc" id="L519" title="All 2 branches missed.">		for(String country : selectedCountries) {</span>
+<span class="nc" id="L520">			XYChart.Series&lt;String,Number&gt; series = new XYChart.Series&lt;String,Number&gt;();</span>
+<span class="nc" id="L521">			series.setName(country);</span>
+<span class="nc bnc" id="L522" title="All 2 branches missed.">			for (String date : dateRange) {</span>
+<span class="nc bnc" id="L523" title="All 2 branches missed.">				if(godData.get(country).containsKey(date) == true) {</span>
+<span class="nc bnc" id="L524" title="All 2 branches missed.">					if(godData.get(country).get(date).getTotalCasesPerM() == -1.0) {</span>
+<span class="nc" id="L525">						continue;</span>
+					}
+<span class="nc" id="L527">					XYChart.Data&lt;String, Number&gt; data = new XYChart.Data&lt;String,Number&gt;(date, godData.get(country).get(date).getTotalCasesPerM());</span>
+<span class="nc" id="L528">					data.setNode(new HoveredThresholdNode(godData.get(country).get(date).getTotalCasesPerM().intValue()));</span>
+<span class="nc" id="L529">					series.getData().add(data);</span>
+<span class="nc" id="L530">				} </span>
+				else {
+<span class="nc" id="L532">					console += country + &quot; &quot; + date + &quot;\n&quot;;</span>
+				}
+<span class="nc" id="L534">			}</span>
+<span class="nc" id="L535">			ChartA.getData().addAll(series);</span>
+<span class="nc" id="L536">		}</span>
+<span class="nc" id="L537">		chartConsoleA.setText(console);</span>
+<span class="nc" id="L538">	}</span>
+	
+	/** 
+	 * A function that provides data to the generated chart based on the selected countries and selected date range that is triggered once the generate confirmed deaths chart button is pressed by the user
+	 * @param event Task B2 to be triggered by the button &quot;Generate Confirmed Deaths Chart&quot; on the Chart B Tab
+	 * The function will also output text in the console listing countries not in the dataset for the specified selected date range
+	 * Note: Legend of up to 10 countries can only be shown although more than 10 countries can be displayed on the chart
+	 */
+	@FXML
+	void doConfirmedDeathsChart(ActionEvent event) {
+		// Finding selected countries
+<span class="nc" id="L549">		Set&lt;String&gt; selectedCountries = new HashSet&lt;String&gt;();</span>
+<span class="nc" id="L550">		ObservableList&lt;String&gt; dateRange = FXCollections.observableArrayList();</span>
+
+<span class="nc" id="L552">		ChartB.getData().clear();</span>
+		
+		// iterate through the menu items and store selected countries in set
+<span class="nc" id="L555">		menuButtonB2.getItems().forEach((menuItem) -&gt; {</span>
+<span class="nc" id="L556">			CheckBox cb = (CheckBox) ((CustomMenuItem) menuItem).getContent();</span>
+<span class="nc bnc" id="L557" title="All 2 branches missed.">			if (cb.isSelected()) {</span>
+<span class="nc" id="L558">				selectedCountries.add(cb.getText());</span>
+			}
+<span class="nc" id="L560">		});</span>
+		
+		// Finding selected date
+<span class="nc" id="L563">		LocalDate startDate = startDateB.getValue();</span>
+<span class="nc" id="L564">		LocalDate endDate = endDateB.getValue();</span>
+		
+<span class="nc bnc" id="L566" title="All 2 branches missed.">		for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(1)) {</span>
+<span class="nc" id="L567">			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;M/d/yyyy&quot;);</span>
+<span class="nc" id="L568">			String selectedDate = date.format(formatter);</span>
+<span class="nc" id="L569">			dateRange.add(selectedDate);</span>
+		}
+		
+<span class="nc bnc" id="L572" title="All 2 branches missed.">		if(selectedCountries.size() == 0) {</span>
+<span class="nc" id="L573">			System.out.println(&quot;No country is selected&quot;);</span>
+		}
+		
+<span class="nc" id="L576">		String console = &quot;&quot;;</span>
+<span class="nc bnc" id="L577" title="All 2 branches missed.">		if(endDate.isBefore(startDate)) {</span>
+<span class="nc" id="L578">			console += &quot;Please select an end date after/at start date&quot;;</span>
+<span class="nc" id="L579">			chartConsoleB.setText(console);</span>
+<span class="nc" id="L580">			return;</span>
+		}
+<span class="nc bnc" id="L582" title="All 2 branches missed.">		if(selectedCountries.size() == 0) {</span>
+<span class="nc" id="L583">			console += &quot;No country is selected&quot;;</span>
+<span class="nc" id="L584">			chartConsoleB.setText(console);</span>
+<span class="nc" id="L585">			return;</span>
+		}
+
+<span class="nc" id="L588">		console += &quot;Countries with missing dates: \n&quot;;</span>
+		
+<span class="nc" id="L590">		xAxisB.setAutoRanging(true);</span>
+<span class="nc" id="L591">		xAxisB.setCategories(dateRange);</span>
+		
+<span class="nc" id="L593">		chartConsoleB.setText(console);</span>
+		
+<span class="nc" id="L595">		ChartB.setTitle(&quot;Cumulative Confirmed COVID-19 Cases (per 1M)&quot;);</span>
+
+<span class="nc" id="L597">		ChartB.setCreateSymbols(false);</span>
+<span class="nc" id="L598">		ChartB.setAnimated(false);</span>
+		
+<span class="nc bnc" id="L600" title="All 2 branches missed.">		for(String country : selectedCountries) {</span>
+<span class="nc" id="L601">			XYChart.Series&lt;String,Number&gt; series = new XYChart.Series&lt;String,Number&gt;();</span>
+<span class="nc" id="L602">			series.setName(country);</span>
+<span class="nc bnc" id="L603" title="All 2 branches missed.">			for (String date : dateRange) {</span>
+<span class="nc bnc" id="L604" title="All 2 branches missed.">				if(godData.get(country).containsKey(date) == true) {</span>
+<span class="nc bnc" id="L605" title="All 2 branches missed.">					if(godData.get(country).get(date).getTotalDeathsPerM() == -1.0) {</span>
+<span class="nc" id="L606">						continue;</span>
+					}
+<span class="nc" id="L608">					XYChart.Data&lt;String, Number&gt; data = new XYChart.Data&lt;String,Number&gt;(date, godData.get(country).get(date).getTotalDeathsPerM());</span>
+<span class="nc" id="L609">					data.setNode(new HoveredThresholdNode(godData.get(country).get(date).getTotalDeathsPerM().intValue()));</span>
+<span class="nc" id="L610">					series.getData().add(data);</span>
+<span class="nc" id="L611">				} </span>
+				else {
+<span class="nc" id="L613">					console += country + &quot; &quot; + date + &quot;\n&quot;;</span>
+				}
+<span class="nc" id="L615">			}</span>
+<span class="nc" id="L616">			ChartB.getData().addAll(series);</span>
+<span class="nc" id="L617">		}</span>
+<span class="nc" id="L618">		chartConsoleB.setText(console);</span>
+<span class="nc" id="L619">	}</span>
+	
+	/**
+	 * A function that provides data to the generated chart based on the selected countries and selected date range that is triggered once the generate vaccination rate chart button is pressed by the user
+	 * @param event  Task C2 to be triggered by the button &quot;Generate Vaccination Rate Chart&quot; on the Chart C Tab
+	 * The function will also output text in the console listing countries not in the dataset for the specified selected date range
+	 * Note: Legend of up to 10 countries can only be shown although more than 10 countries can be displayed on the chart
+	 */
+	@FXML
+	void doVaccinationRateChart(ActionEvent event) {
+		// Finding selected countries
+<span class="nc" id="L630">		Set&lt;String&gt; selectedCountries = new HashSet&lt;String&gt;();</span>
+<span class="nc" id="L631">		ObservableList&lt;String&gt; dateRange = FXCollections.observableArrayList();</span>
+		
+		// iterate through the menu items and store selected countries in set
+<span class="nc" id="L634">		menuButtonC2.getItems().forEach((menuItem) -&gt; {</span>
+<span class="nc" id="L635">			CheckBox cb = (CheckBox) ((CustomMenuItem) menuItem).getContent();</span>
+<span class="nc bnc" id="L636" title="All 2 branches missed.">			if (cb.isSelected()) {</span>
+<span class="nc" id="L637">				selectedCountries.add(cb.getText());</span>
+			}
+<span class="nc" id="L639">		});</span>
+		
+<span class="nc" id="L641">		String console = &quot;&quot;;</span>
+<span class="nc bnc" id="L642" title="All 2 branches missed.">		if(selectedCountries.size() == 0) {</span>
+<span class="nc" id="L643">			System.out.println(&quot;No country is selected&quot;);</span>
+		}
+		
+<span class="nc" id="L646">		ChartC.getData().clear();</span>
+		
+		// Finding selected date
+<span class="nc" id="L649">		LocalDate startDate = startDateC.getValue();</span>
+<span class="nc" id="L650">		LocalDate endDate = endDateC.getValue();</span>
+		
+		
+<span class="nc bnc" id="L653" title="All 2 branches missed.">		for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(1)) {</span>
+<span class="nc" id="L654">			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;M/d/yyyy&quot;);</span>
+<span class="nc" id="L655">			String selectedDate = date.format(formatter);</span>
+<span class="nc" id="L656">			dateRange.add(selectedDate);</span>
+		}
+				
+		
+<span class="nc bnc" id="L660" title="All 2 branches missed.">		if(endDate.isBefore(startDate)) {</span>
+<span class="nc" id="L661">			console += &quot;Please select an end date after/at start date&quot;;</span>
+<span class="nc" id="L662">			chartConsoleC.setText(console);</span>
+<span class="nc" id="L663">			return;</span>
+		}
+<span class="nc bnc" id="L665" title="All 2 branches missed.">		if(selectedCountries.size() == 0) {</span>
+<span class="nc" id="L666">			console += &quot;No country is selected&quot;;</span>
+<span class="nc" id="L667">			chartConsoleC.setText(console);</span>
+<span class="nc" id="L668">			return;</span>
+		}
+    
+<span class="nc" id="L671">		console += &quot;Countries with missing dates: \n&quot;;</span>
+	
+<span class="nc" id="L673">		chartConsoleC.setText(console);</span>
+		
+<span class="nc" id="L675">		xAxisC.setAutoRanging(true);</span>
+<span class="nc" id="L676">		xAxisC.setCategories(dateRange);</span>
+		
+<span class="nc" id="L678">		ChartC.setTitle(&quot;Cumulative Rate of Vaccination against COVID-19&quot;);</span>
+
+<span class="nc" id="L680">		ChartC.setCreateSymbols(false);</span>
+<span class="nc" id="L681">		ChartC.setAnimated(false);</span>
+		
+<span class="nc bnc" id="L683" title="All 2 branches missed.">		for(String country : selectedCountries) {</span>
+<span class="nc" id="L684">			XYChart.Series&lt;String,Number&gt; series = new XYChart.Series&lt;String,Number&gt;();</span>
+<span class="nc" id="L685">			series.setName(country);</span>
+<span class="nc bnc" id="L686" title="All 2 branches missed.">			for (String date : dateRange) {</span>
+<span class="nc bnc" id="L687" title="All 2 branches missed.">				if(godData.get(country).containsKey(date) == true) {</span>
+<span class="nc bnc" id="L688" title="All 2 branches missed.">					if(godData.get(country).get(date).getVaccinationRate() == -1.0) {</span>
+<span class="nc" id="L689">						continue;</span>
+					}
+<span class="nc" id="L691">					XYChart.Data&lt;String, Number&gt; data = new XYChart.Data&lt;String,Number&gt;(date, godData.get(country).get(date).getVaccinationRate());</span>
+<span class="nc" id="L692">					data.setNode(new HoveredThresholdNode(godData.get(country).get(date).getVaccinationRate().intValue()));</span>
+<span class="nc" id="L693">					series.getData().add(data);</span>
+<span class="nc" id="L694">				} </span>
+				else {
+<span class="nc" id="L696">					console += country + &quot; &quot; + date + &quot;\n&quot;;</span>
+				}
+<span class="nc" id="L698">			}</span>
+<span class="nc" id="L699">			ChartC.getData().addAll(series);</span>
+<span class="nc" id="L700">		}</span>
+<span class="nc" id="L701">		chartConsoleC.setText(console);</span>
+<span class="nc" id="L702">	}</span>
+
+	/**
+	 * Task Zero To be triggered by the &quot;Confirmed Cases&quot; button on the Task Zero
+	 * Tab
+	 * 
+	 */
+	@FXML
+	void doConfirmedCases(ActionEvent event) {
+<span class="nc" id="L711">		String iDataset = textfieldDataset.getText();</span>
+<span class="nc" id="L712">		String iISO = textfieldISO.getText();</span>
+<span class="nc" id="L713">		String oReport = DataAnalysis.getConfirmedCases(iDataset, iISO);</span>
+<span class="nc" id="L714">		textAreaConsole.setText(oReport);</span>
+<span class="nc" id="L715">	}</span>
+
+	/**
+	 * Task Zero To be triggered by the &quot;Confirmed Deaths&quot; button on the Task Zero
+	 * Tab
+	 * 
+	 */
+	@FXML
+	void doConfirmedDeaths(ActionEvent event) {
+<span class="nc" id="L724">		String iDataset = textfieldDataset.getText();</span>
+<span class="nc" id="L725">		String iISO = textfieldISO.getText();</span>
+<span class="nc" id="L726">		String oReport = DataAnalysis.getConfirmedDeaths(iDataset, iISO);</span>
+<span class="nc" id="L727">		textAreaConsole.setText(oReport);</span>
+<span class="nc" id="L728">	}</span>
+
+	/**
+	 * Task Zero To be triggered by the &quot;Rate of Vaccination&quot; button on the Task
+	 * Zero Tab
+	 * 
+	 */
+	@FXML
+	void doRateOfVaccination(ActionEvent event) {
+<span class="nc" id="L737">		String iDataset = textfieldDataset.getText();</span>
+<span class="nc" id="L738">		String iISO = textfieldISO.getText();</span>
+<span class="nc" id="L739">		String oReport = DataAnalysis.getRateOfVaccination(iDataset, iISO);</span>
+<span class="nc" id="L740">		textAreaConsole.setText(oReport);</span>
+<span class="nc" id="L741">	}</span>
+	/**
+	 * An initializer that runs once the program is started
+	 * Loads the Dataset
+	 * Initializes the datepicker
+	 * Initializes the menubutton
+	 * Initialize Charts and Charts Title
+	 * Initializes Table and Table Title
+	 * Initializes the Search Feature
+	 */
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		// TODO Auto-generated method stub
+		// Load dataset
+<span class="nc" id="L755">		String iDataset = textfieldDataset.getText();</span>
+<span class="nc" id="L756">		Set&lt;String&gt; countries = DataAnalysis.getCountryISO(iDataset);</span>
+<span class="nc" id="L757">		godData = DataAnalysis.getEverythingISO();</span>
+
+
+		// initialize the datepicker
+<span class="nc" id="L761">		LocalDate now = LocalDate.of(2021, Month.JULY, 20);</span>
+<span class="nc" id="L762">		dateA.setValue(now);</span>
+<span class="nc" id="L763">		dateB.setValue(now);</span>
+<span class="nc" id="L764">		dateC.setValue(now);</span>
+<span class="nc" id="L765">		startDateA.setValue(now);</span>
+<span class="nc" id="L766">		endDateA.setValue(now);</span>
+<span class="nc" id="L767">		startDateB.setValue(now);</span>
+<span class="nc" id="L768">		endDateB.setValue(now);</span>
+<span class="nc" id="L769">		startDateC.setValue(now);</span>
+<span class="nc" id="L770">		endDateC.setValue(now);</span>
+		
+		// limiting the datepicker to
+<span class="nc" id="L773">		DatePicker maxDate = new DatePicker();</span>
+<span class="nc" id="L774">		DatePicker minDate = new DatePicker();</span>
+<span class="nc" id="L775">		maxDate.setValue(LocalDate.of(2021, Month.JULY, 20));</span>
+<span class="nc" id="L776">		minDate.setValue(LocalDate.of(2020, Month.MARCH, 1));</span>
+		final Callback&lt;DatePicker, DateCell&gt; dayCellFactory;
+
+<span class="nc" id="L779">		dayCellFactory = (final DatePicker datePicker) -&gt; new DateCell() {</span>
+			@Override
+			public void updateItem(LocalDate item, boolean empty) {
+<span class="nc" id="L782">				super.updateItem(item, empty);</span>
+<span class="nc bnc" id="L783" title="All 4 branches missed.">				if (item.isAfter(maxDate.getValue()) || item.isBefore(minDate.getValue())) { // Disable all dates after</span>
+																								// required date
+<span class="nc" id="L785">					setDisable(true);</span>
+<span class="nc" id="L786">					setStyle(&quot;-fx-background-color: #ffc0cb;&quot;); // To set background on different color</span>
+				}
+<span class="nc" id="L788">			}</span>
+		};
+
+<span class="nc" id="L791">		dateA.setDayCellFactory(dayCellFactory);</span>
+<span class="nc" id="L792">		dateB.setDayCellFactory(dayCellFactory);</span>
+<span class="nc" id="L793">		dateC.setDayCellFactory(dayCellFactory);</span>
+<span class="nc" id="L794">		startDateA.setDayCellFactory(dayCellFactory);</span>
+<span class="nc" id="L795">		endDateA.setDayCellFactory(dayCellFactory);</span>
+<span class="nc" id="L796">		startDateB.setDayCellFactory(dayCellFactory);</span>
+<span class="nc" id="L797">		endDateB.setDayCellFactory(dayCellFactory);</span>
+<span class="nc" id="L798">		startDateC.setDayCellFactory(dayCellFactory);</span>
+<span class="nc" id="L799">		endDateC.setDayCellFactory(dayCellFactory);</span>
+		
+
+		// initialize the menubutton
+		CustomMenuItem menuItem;
+<span class="nc" id="L804">		Iterator&lt;String&gt; valueA1 = countries.iterator();</span>
+
+		// add countries to menu button for choosing
+<span class="nc bnc" id="L807" title="All 2 branches missed.">		while (valueA1.hasNext()) {</span>
+<span class="nc" id="L808">			CheckBox cb = new CheckBox(valueA1.next());</span>
+<span class="nc" id="L809">			menuItem = new CustomMenuItem(cb);</span>
+<span class="nc" id="L810">			menuItem.setHideOnClick(false);</span>
+<span class="nc" id="L811">			menuButtonA1.getItems().add(menuItem);</span>
+<span class="nc" id="L812">		}</span>
+		
+<span class="nc" id="L814">		Iterator&lt;String&gt; valueB1 = countries.iterator();</span>
+
+		// add countries to menu button for choosing
+<span class="nc bnc" id="L817" title="All 2 branches missed.">		while (valueB1.hasNext()) {</span>
+<span class="nc" id="L818">			CheckBox cb = new CheckBox(valueB1.next());</span>
+<span class="nc" id="L819">			menuItem = new CustomMenuItem(cb);</span>
+<span class="nc" id="L820">			menuItem.setHideOnClick(false);</span>
+<span class="nc" id="L821">			menuButtonB1.getItems().add(menuItem);</span>
+<span class="nc" id="L822">		}</span>
+		
+<span class="nc" id="L824">		Iterator&lt;String&gt; valueC1 = countries.iterator();</span>
+
+		// add countries to menu button for choosing
+<span class="nc bnc" id="L827" title="All 2 branches missed.">		while (valueC1.hasNext()) {</span>
+<span class="nc" id="L828">			CheckBox cb = new CheckBox(valueC1.next());</span>
+<span class="nc" id="L829">			menuItem = new CustomMenuItem(cb);</span>
+<span class="nc" id="L830">			menuItem.setHideOnClick(false);</span>
+<span class="nc" id="L831">			menuButtonC1.getItems().add(menuItem);</span>
+<span class="nc" id="L832">		}</span>
+		
+<span class="nc" id="L834">		Iterator&lt;String&gt; valueA2 = countries.iterator();</span>
+
+		// add countries to menu button for choosing
+<span class="nc bnc" id="L837" title="All 2 branches missed.">		while (valueA2.hasNext()) {</span>
+<span class="nc" id="L838">			CheckBox cb = new CheckBox(valueA2.next());</span>
+<span class="nc" id="L839">			menuItem = new CustomMenuItem(cb);</span>
+<span class="nc" id="L840">			menuItem.setHideOnClick(false);</span>
+<span class="nc" id="L841">			menuButtonA2.getItems().add(menuItem);</span>
+<span class="nc" id="L842">		}</span>
+		
+<span class="nc" id="L844">		Iterator&lt;String&gt; valueB2 = countries.iterator();</span>
+
+		// add countries to menu button for choosing
+<span class="nc bnc" id="L847" title="All 2 branches missed.">		while (valueB2.hasNext()) {</span>
+<span class="nc" id="L848">			CheckBox cb = new CheckBox(valueB2.next());</span>
+<span class="nc" id="L849">			menuItem = new CustomMenuItem(cb);</span>
+<span class="nc" id="L850">			menuItem.setHideOnClick(false);</span>
+<span class="nc" id="L851">			menuButtonB2.getItems().add(menuItem);</span>
+<span class="nc" id="L852">		}</span>
+		
+<span class="nc" id="L854">		Iterator&lt;String&gt; valueC2 = countries.iterator();</span>
+
+		// add countries to menu button for choosing
+<span class="nc bnc" id="L857" title="All 2 branches missed.">		while (valueC2.hasNext()) {</span>
+<span class="nc" id="L858">			CheckBox cb = new CheckBox(valueC2.next());</span>
+<span class="nc" id="L859">			menuItem = new CustomMenuItem(cb);</span>
+<span class="nc" id="L860">			menuItem.setHideOnClick(false);</span>
+<span class="nc" id="L861">			menuButtonC2.getItems().add(menuItem);</span>
+<span class="nc" id="L862">		}</span>
+		
+		//initialize chart title
+<span class="nc" id="L865">		chartTitleA.setText(&quot;Cumulative of Confirmed COVID-19 Cases (per 1M)&quot;);</span>
+<span class="nc" id="L866">		chartTitleB.setText(&quot;Cumulative of Confirmed COVID-19 Deaths (per 1M)&quot;);</span>
+<span class="nc" id="L867">		chartTitleC.setText(&quot;Cumulative Rate of Vaccination against COVID-19&quot;);</span>
+		
+		// Initialize table A
+<span class="nc" id="L870">		tableTitleA.setText(&quot;Number of Confirmed COVID-19 Cases as of &quot;);</span>
+
+<span class="nc" id="L872">		tableA.setEditable(true);</span>
+
+<span class="nc" id="L874">		TableColumn&lt;Row, String&gt; CountryAColumn = new TableColumn&lt;Row, String&gt;(&quot;Country&quot;);</span>
+<span class="nc" id="L875">		TableColumn&lt;Row, String&gt; TotalCasesColumn = new TableColumn&lt;Row, String&gt;(&quot;Total Cases&quot;);</span>
+<span class="nc" id="L876">		TableColumn&lt;Row, String&gt; TotalCasesper1MColumn = new TableColumn&lt;Row, String&gt;(&quot;Total Cases (per 1M)&quot;);</span>
+
+<span class="nc" id="L878">		CountryAColumn.setMinWidth(200);</span>
+<span class="nc" id="L879">		TotalCasesColumn.setMinWidth(200);</span>
+<span class="nc" id="L880">		TotalCasesper1MColumn.setMinWidth(200);</span>
+
+<span class="nc" id="L882">		CountryAColumn.setCellValueFactory(new PropertyValueFactory&lt;Row, String&gt;(&quot;country&quot;));</span>
+
+<span class="nc" id="L884">		TotalCasesColumn.setCellValueFactory(new PropertyValueFactory&lt;Row, String&gt;(&quot;totalCasesTable&quot;));</span>
+<span class="nc" id="L885">		TotalCasesper1MColumn.setCellValueFactory(new PropertyValueFactory&lt;Row, String&gt;(&quot;totalCasesPerMTable&quot;));</span>
+    
+<span class="nc" id="L887">		tableA.getColumns().addAll(CountryAColumn, TotalCasesColumn, TotalCasesper1MColumn);</span>
+		
+<span class="nc" id="L889">		FilteredList&lt;Row&gt; filteredDataA = new FilteredList&lt;&gt;(dataA1, b -&gt; true);</span>
+		
+<span class="nc" id="L891">		searchA1.textProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
+<span class="nc" id="L892">			filteredDataA.setPredicate(row -&gt; {</span>
+<span class="nc bnc" id="L893" title="All 4 branches missed.">				if (newValue == null || newValue.isEmpty()) {</span>
+<span class="nc" id="L894">					return true;</span>
+				}
+				
+<span class="nc" id="L897">				String lowerCaseFilter = newValue.toLowerCase();</span>
+				
+<span class="nc bnc" id="L899" title="All 2 branches missed.">				if (row.getCountry().toLowerCase().contains(lowerCaseFilter)) {</span>
+<span class="nc" id="L900">					return true;</span>
+				}
+<span class="nc" id="L902">				return false;</span>
+			});
+<span class="nc" id="L904">		});</span>
+		
+<span class="nc" id="L906">		SortedList&lt;Row&gt; sortedDataA = new SortedList&lt;&gt;(filteredDataA);</span>
+		
+<span class="nc" id="L908">		sortedDataA.comparatorProperty().bind(tableA.comparatorProperty());</span>
+		
+<span class="nc" id="L910">		tableA.setItems(sortedDataA);</span>
+
+		// Initialize table B
+<span class="nc" id="L913">		tableTitleB.setText(&quot;Number of Confirmed COVID-19 Deaths as of &quot;);</span>
+
+<span class="nc" id="L915">		tableB.setEditable(true);</span>
+
+<span class="nc" id="L917">		TableColumn&lt;Row, String&gt; CountryBColumn = new TableColumn&lt;Row, String&gt;(&quot;Country&quot;);</span>
+<span class="nc" id="L918">		TableColumn&lt;Row, String&gt; TotalDeathsColumn = new TableColumn&lt;Row, String&gt;(&quot;Total Deaths&quot;);</span>
+<span class="nc" id="L919">		TableColumn&lt;Row, String&gt; TotalDeathsper1MColumn = new TableColumn&lt;Row, String&gt;(&quot;Total Deaths (per 1M)&quot;);</span>
+
+<span class="nc" id="L921">		CountryBColumn.setMinWidth(200);</span>
+<span class="nc" id="L922">		TotalDeathsColumn.setMinWidth(200);</span>
+<span class="nc" id="L923">		TotalDeathsper1MColumn.setMinWidth(200);</span>
+
+<span class="nc" id="L925">		CountryBColumn.setCellValueFactory(new PropertyValueFactory&lt;Row, String&gt;(&quot;country&quot;));</span>
+
+<span class="nc" id="L927">		TotalDeathsColumn.setCellValueFactory(new PropertyValueFactory&lt;Row, String&gt;(&quot;totalDeathsTable&quot;));</span>
+<span class="nc" id="L928">		TotalDeathsper1MColumn.setCellValueFactory(new PropertyValueFactory&lt;Row, String&gt;(&quot;totalDeathsPerMTable&quot;));</span>
+
+<span class="nc" id="L930">		tableB.setItems(dataB1);</span>
+
+<span class="nc" id="L932">		tableB.getColumns().addAll(CountryBColumn, TotalDeathsColumn, TotalDeathsper1MColumn);</span>
+		
+<span class="nc" id="L934">		FilteredList&lt;Row&gt; filteredDataB = new FilteredList&lt;&gt;(dataB1, b -&gt; true);</span>
+		
+<span class="nc" id="L936">		searchB1.textProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
+<span class="nc" id="L937">			filteredDataB.setPredicate(row -&gt; {</span>
+<span class="nc bnc" id="L938" title="All 4 branches missed.">				if (newValue == null || newValue.isEmpty()) {</span>
+<span class="nc" id="L939">					return true;</span>
+				}
+				
+<span class="nc" id="L942">				String lowerCaseFilter = newValue.toLowerCase();</span>
+				
+<span class="nc bnc" id="L944" title="All 2 branches missed.">				if (row.getCountry().toLowerCase().indexOf(lowerCaseFilter) != -1) {</span>
+<span class="nc" id="L945">					return true;</span>
+<span class="nc" id="L946">				}else return false;</span>
+			});
+<span class="nc" id="L948">		});</span>
+		
+<span class="nc" id="L950">		SortedList&lt;Row&gt; sortedDataB = new SortedList&lt;&gt;(filteredDataB);</span>
+		
+<span class="nc" id="L952">		sortedDataB.comparatorProperty().bind(tableB.comparatorProperty());</span>
+		
+<span class="nc" id="L954">		tableB.setItems(sortedDataB);</span>
+		
+		// Initialize table C
+<span class="nc" id="L957">		tableTitleC.setText(&quot;Rate of Vaccination against COVID-19 as of &quot;);</span>
+
+<span class="nc" id="L959">		tableC.setEditable(true);</span>
+
+<span class="nc" id="L961">		TableColumn&lt;Row, String&gt; CountryCColumn = new TableColumn&lt;Row, String&gt;(&quot;Country&quot;);</span>
+<span class="nc" id="L962">		TableColumn&lt;Row, String&gt; TotalVaccinatedColumn = new TableColumn&lt;Row, String&gt;(&quot;Fully Vaccinated&quot;);</span>
+<span class="nc" id="L963">		TableColumn&lt;Row, String&gt; VaccinationRateColumn = new TableColumn&lt;Row, String&gt;(&quot;Rate of Vaccination&quot;);</span>
+
+<span class="nc" id="L965">		CountryCColumn.setMinWidth(200);</span>
+<span class="nc" id="L966">		TotalVaccinatedColumn.setMinWidth(200);</span>
+<span class="nc" id="L967">		VaccinationRateColumn.setMinWidth(200);</span>
+
+<span class="nc" id="L969">		CountryCColumn.setCellValueFactory(new PropertyValueFactory&lt;Row, String&gt;(&quot;country&quot;));</span>
+
+<span class="nc" id="L971">		TotalVaccinatedColumn.setCellValueFactory(new PropertyValueFactory&lt;Row, String&gt;(&quot;totalVaccinatedTable&quot;));</span>
+<span class="nc" id="L972">		VaccinationRateColumn.setCellValueFactory(new PropertyValueFactory&lt;Row, String&gt;(&quot;vaccinationRateTable&quot;));</span>
+
+<span class="nc" id="L974">		tableC.setItems(dataC1);</span>
+
+<span class="nc" id="L976">		tableC.getColumns().addAll(CountryCColumn, TotalVaccinatedColumn, VaccinationRateColumn);</span>
+		
+<span class="nc" id="L978">		FilteredList&lt;Row&gt; filteredDataC = new FilteredList&lt;&gt;(dataC1, b -&gt; true);</span>
+		
+<span class="nc" id="L980">		searchC1.textProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
+<span class="nc" id="L981">			filteredDataC.setPredicate(row -&gt; {</span>
+<span class="nc bnc" id="L982" title="All 4 branches missed.">				if (newValue == null || newValue.isEmpty()) {</span>
+<span class="nc" id="L983">					return true;</span>
+				}
+				
+<span class="nc" id="L986">				String lowerCaseFilter = newValue.toLowerCase();</span>
+				
+<span class="nc bnc" id="L988" title="All 2 branches missed.">				if (row.getCountry().toLowerCase().indexOf(lowerCaseFilter) != -1) {</span>
+<span class="nc" id="L989">					return true;</span>
+<span class="nc" id="L990">				}else return false;</span>
+			});
+<span class="nc" id="L992">		});</span>
+		
+<span class="nc" id="L994">		SortedList&lt;Row&gt; sortedDataC = new SortedList&lt;&gt;(filteredDataC);</span>
+		
+<span class="nc" id="L996">		sortedDataC.comparatorProperty().bind(tableC.comparatorProperty());</span>
+		
+<span class="nc" id="L998">		tableC.setItems(sortedDataC);</span>
+		
+<span class="nc" id="L1000">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

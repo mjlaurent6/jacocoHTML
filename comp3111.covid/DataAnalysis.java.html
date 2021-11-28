@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DataAnalysis.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid</a> &gt; <span class="el_source">DataAnalysis.java</span></div><h1>DataAnalysis.java</h1><pre class="source lang-java linenums">package comp3111.covid;
+
+import java.time.LocalDate;
+import java.util.*;
+
+import org.apache.commons.csv.*;
+import edu.duke.*;
+import javafx.beans.property.SimpleStringProperty;
+
+/**
+ * 
+ * Data Explorer on COVID-19
+ * @author &lt;a href=mailto:mgdychengbeng19@gmail.com&gt;mgdcb&lt;/a&gt;
+ * @author &lt;a href=mailto:temp@gmail.com&gt;nchristanto&lt;/a&gt;
+ * @author &lt;a href=mailto:temp@gmail.com&gt;mjlaurent&lt;/a&gt;
+ * @version	1.1
+ * 
+ */
+<span class="nc" id="L19">public class DataAnalysis {</span>
+	/**
+	 * iDataset holds the filename of the csv data file
+	 */
+	public static String iDataset;
+	/**
+	 * A function to parse the dataset
+	 * @param dataset The csv dataset filename to be used in the program 
+	 */
+	public static CSVParser getFileParser(String dataset) {
+<span class="fc" id="L29">	     FileResource fr = new FileResource(&quot;dataset/&quot; + dataset);</span>
+<span class="fc" id="L30">	     return fr.getCSVParser(true);</span>
+		}
+	/**
+	 * A function that gets all the countries in the dataset 
+	 * @param dataset The csv dataset filename to be used in the program 
+	 * @return Returns a TreeSet of Strings with each String being a country in the dataset
+	 */
+	public static Set&lt;String&gt; getCountryISO(String dataset) {
+<span class="fc" id="L38">	    iDataset = dataset;</span>
+<span class="fc" id="L39">		Set&lt;String&gt; countries = new TreeSet&lt;String&gt;();</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">		for (CSVRecord rec: getFileParser(dataset)) {</span>
+<span class="fc" id="L41">			String s = rec.get(&quot;location&quot;);</span>
+<span class="fc" id="L42">			countries.add(s);</span>
+<span class="fc" id="L43">		}</span>
+
+<span class="fc" id="L45">		return countries;</span>
+	}
+	/**
+	 * A function to generate a HashMap that maps a country ISO code to another HashMap thats maps the date to a Row Object
+	 * The function creates a RowObject with values of TotalCases, TotalCasesPerM, TotalDeaths, TotalDeathsPerM, TotalVaccinated, and VaccinationRate
+	 * The function parses the dataset into a HashMap object
+	 * @return Returns a HashMap object containing the dataset information that can be obtained based on country and date 
+	 */
+	public static HashMap&lt;String, HashMap&lt;String, Row&gt;&gt; getEverythingISO() {
+<span class="fc" id="L54">		HashMap&lt;String, HashMap&lt;String, Row&gt;&gt; countries= new HashMap&lt;String, HashMap&lt;String, Row&gt;&gt;();</span>
+		
+<span class="fc bfc" id="L56" title="All 2 branches covered.">		for (CSVRecord rec : getFileParser(iDataset)) {</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">			if(!countries.containsKey(rec.get(&quot;location&quot;))) {</span>
+<span class="fc" id="L58">				countries.put(rec.get(&quot;location&quot;), new HashMap&lt;String, Row&gt;());</span>
+			}
+			
+<span class="fc" id="L61">			countries.get(rec.get(&quot;location&quot;)).put(rec.get(&quot;date&quot;),new Row(rec.get(&quot;location&quot;), rec.get(&quot;date&quot;)));</span>
+			
+			//put cases
+<span class="fc" id="L64">			Long confirmedCases = (long) -1;</span>
+<span class="fc" id="L65">			String cases = rec.get(&quot;total_cases&quot;);</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">			if (!cases.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L67">				confirmedCases = (long) 0;</span>
+<span class="fc" id="L68">				confirmedCases += Long.parseLong(cases);</span>
+			}
+<span class="fc" id="L70">			countries.get(rec.get(&quot;location&quot;)).get(rec.get(&quot;date&quot;)).setTotalCases(confirmedCases);</span>
+			
+			//put casesPerMillion
+<span class="fc" id="L73">			double confirmedCasesPerMillion = -1;</span>
+<span class="fc" id="L74">			String totalCases = rec.get(&quot;total_cases_per_million&quot;);</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">			if (!totalCases.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L76">				confirmedCasesPerMillion = 0;</span>
+<span class="fc" id="L77">				confirmedCasesPerMillion += Double.parseDouble(totalCases);</span>
+			}
+<span class="fc" id="L79">			countries.get(rec.get(&quot;location&quot;)).get(rec.get(&quot;date&quot;)).setTotalCasesPerM(confirmedCasesPerMillion);</span>
+			
+			//put deaths
+<span class="fc" id="L82">			Long deathCases = (long) -1;</span>
+<span class="fc" id="L83">			String deaths = rec.get(&quot;total_deaths&quot;);</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">			if (!deaths.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L85">				deathCases = (long) 0;</span>
+<span class="fc" id="L86">				deathCases += Long.parseLong(deaths);</span>
+			}
+<span class="fc" id="L88">			countries.get(rec.get(&quot;location&quot;)).get(rec.get(&quot;date&quot;)).setTotalDeaths(deathCases);</span>
+			
+			//put deathsPerMillion		
+<span class="fc" id="L91">			double deathCasesPerMillion = -1;</span>
+<span class="fc" id="L92">			String totalDeaths = rec.get(&quot;total_deaths_per_million&quot;);</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">			if (!totalDeaths.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L94">				deathCasesPerMillion = 0;</span>
+<span class="fc" id="L95">				deathCasesPerMillion += Double.parseDouble(totalDeaths);</span>
+			}
+<span class="fc" id="L97">			countries.get(rec.get(&quot;location&quot;)).get(rec.get(&quot;date&quot;)).setTotalDeathsPerM(deathCasesPerMillion);</span>
+			
+			//put vaccinated
+<span class="fc" id="L100">			Long fullyVaccinated = (long) -1;</span>
+<span class="fc" id="L101">			String vaccinated = rec.get(&quot;people_fully_vaccinated&quot;);</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">			if (!vaccinated.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L103">				fullyVaccinated = (long) 0;</span>
+<span class="fc" id="L104">				fullyVaccinated += Long.parseLong(vaccinated);</span>
+			}
+<span class="fc" id="L106">			countries.get(rec.get(&quot;location&quot;)).get(rec.get(&quot;date&quot;)).setTotalVaccinated(fullyVaccinated);</span>
+			
+			//put vaccinationRate
+<span class="fc" id="L109">			double population = -1;</span>
+<span class="fc" id="L110">			String a = rec.get(&quot;population&quot;);</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">			if (!a.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L112">				population = 0;</span>
+<span class="fc" id="L113">				population += Double.parseDouble(a);</span>
+			}
+<span class="fc" id="L115">			countries.get(rec.get(&quot;location&quot;)).get(rec.get(&quot;date&quot;)).setVaccinationRate(fullyVaccinated,population);</span>
+<span class="fc" id="L116">		}</span>
+		
+	
+		
+		
+<span class="fc" id="L121">		return countries;</span>
+	}
+	
+	/**
+	 * A function to obtain the number of confirmed cases of a country based on a dataset and country ISO code
+	 * @param dataset The csv dataset filename to be used in the program 
+	 * @param iso_code The country ISO code of the country that the user wishes to know the number of confirmed cases
+	 * @return Returns a report that includes the number of confirmed cases and the number of days reporting the confirmed cases
+	 */
+	// Task 0
+	public static String getConfirmedCases(String dataset, String iso_code) {
+<span class="fc" id="L132">		String oReport = &quot;&quot;;	</span>
+<span class="fc" id="L133">		long confirmedCases = 0;</span>
+<span class="fc" id="L134">		long numRecord = 0;</span>
+<span class="fc" id="L135">		long totalNumRecord = 0;</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">		for (CSVRecord rec : getFileParser(dataset)) {</span>
+			
+<span class="fc bfc" id="L138" title="All 2 branches covered.">			if (rec.get(&quot;iso_code&quot;).equals(iso_code)) {</span>
+<span class="fc" id="L139">				String s = rec.get(&quot;total_deaths&quot;);</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">				if (!s.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L141">					confirmedCases += Long.parseLong(s);</span>
+<span class="fc" id="L142">					numRecord++;</span>
+				}
+			}		
+<span class="fc" id="L145">			totalNumRecord++;</span>
+<span class="fc" id="L146">		}</span>
+		
+<span class="fc" id="L148">		oReport = String.format(&quot;Dataset (%s): %,d Records\n\n&quot;, dataset, totalNumRecord);</span>
+<span class="fc" id="L149">		oReport += String.format(&quot;[Summary (%s)]\n&quot;, iso_code);</span>
+<span class="fc" id="L150">		oReport += String.format(&quot;Number of Confirmed Cases: %,d\n&quot;, confirmedCases);</span>
+<span class="fc" id="L151">		oReport += String.format(&quot;Number of Days Reported: %,d\n&quot;, numRecord);</span>
+<span class="fc" id="L152">		System.out.println(oReport);</span>
+
+<span class="fc" id="L154">		return oReport;</span>
+	}
+	/**
+	 * A function to obtain the number of confirmed deaths of a country based on a dataset and country ISO code
+	 * @param dataset The csv dataset filename to be used in the program 
+	 * @param iso_code The country ISO code of the country that the user wishes to know the number of confirmed deaths
+	 * @return Returns a report that includes the number of confirmed deaths and the number of days reporting the confirmed deaths
+	 */
+	
+	 public static String getConfirmedDeaths(String dataset, String iso_code) {
+<span class="fc" id="L164">			String oReport = &quot;&quot;;	</span>
+<span class="fc" id="L165">			long confirmedDeaths = 0;</span>
+<span class="fc" id="L166">			long numRecord = 0;</span>
+<span class="fc" id="L167">			long totalNumRecord = 0;</span>
+			
+<span class="fc bfc" id="L169" title="All 2 branches covered.">			for (CSVRecord rec : getFileParser(dataset)) {</span>
+				
+<span class="fc bfc" id="L171" title="All 2 branches covered.">				if (rec.get(&quot;iso_code&quot;).equals(iso_code)) {</span>
+<span class="fc" id="L172">					String s = rec.get(&quot;new_deaths&quot;);</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">					if (!s.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L174">						confirmedDeaths += Long.parseLong(s);</span>
+<span class="fc" id="L175">						numRecord++;</span>
+					}
+				}		
+<span class="fc" id="L178">				totalNumRecord++;</span>
+<span class="fc" id="L179">			}</span>
+			
+<span class="fc" id="L181">			oReport = String.format(&quot;Dataset (%s): %,d Records\n\n&quot;, dataset, totalNumRecord);</span>
+<span class="fc" id="L182">			oReport += String.format(&quot;[Summary (%s)]\n&quot;, iso_code);</span>
+<span class="fc" id="L183">			oReport += String.format(&quot;Number of Deaths: %,d\n&quot;, confirmedDeaths);</span>
+<span class="fc" id="L184">			oReport += String.format(&quot;Number of Days Reported: %,d\n&quot;, numRecord);</span>
+			
+<span class="fc" id="L186">			return oReport;</span>
+	 }
+	 /**
+	  * 
+	  * A function to obtain the vacciantion rate of a country based on a dataset and country ISO code
+	 * @param dataset The csv dataset filename to be used in the program 
+	 * @param iso_code The country ISO code of the country that the user wishes to know the vaccination rate
+	 * @return Returns a report that includes the number of people fully vaccinated, population, vaccination rate, and the number of days reporting the vaccination rate
+	  */
+	 public static String getRateOfVaccination(String dataset, String iso_code) {
+<span class="fc" id="L196">			String oReport = &quot;&quot;;	</span>
+<span class="fc" id="L197">			long fullyVaccinated = 0;</span>
+<span class="fc" id="L198">			long numRecord = 0;</span>
+<span class="fc" id="L199">			long totalNumRecord = 0;</span>
+<span class="fc" id="L200">			long population = 0;</span>
+<span class="fc" id="L201">			float rate = 0.0f;</span>
+						
+<span class="fc bfc" id="L203" title="All 2 branches covered.">			for (CSVRecord rec : getFileParser(dataset)) {</span>
+				
+<span class="fc bfc" id="L205" title="All 2 branches covered.">				if (rec.get(&quot;iso_code&quot;).equals(iso_code)) {</span>
+					
+<span class="fc" id="L207">					String s1 = rec.get(&quot;people_fully_vaccinated&quot;);</span>
+<span class="fc" id="L208">					String s2 = rec.get(&quot;population&quot;);		</span>
+<span class="pc bpc" id="L209" title="1 of 4 branches missed.">					if (!s1.equals(&quot;&quot;) &amp;&amp; !s2.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L210">						fullyVaccinated = Long.parseLong(s1);</span>
+<span class="fc" id="L211">						population = Long.parseLong(s2);						</span>
+<span class="fc" id="L212">						numRecord++;</span>
+					}
+				}		
+<span class="fc" id="L215">				totalNumRecord++;</span>
+<span class="fc" id="L216">			}</span>
+			
+<span class="pc bpc" id="L218" title="1 of 2 branches missed.">			if (population !=0)</span>
+<span class="fc" id="L219">				rate = (float) fullyVaccinated / population * 100;</span>
+			
+<span class="fc" id="L221">			oReport = String.format(&quot;Dataset (%s): %,d Records\n\n&quot;, dataset, totalNumRecord);</span>
+<span class="fc" id="L222">			oReport += String.format(&quot;[Summary (%s)]\n&quot;, iso_code);</span>
+<span class="fc" id="L223">			oReport += String.format(&quot;Number of People Fully Vaccinated: %,d\n&quot;, fullyVaccinated);</span>
+<span class="fc" id="L224">			oReport += String.format(&quot;Population: %,d\n&quot;, population);</span>
+<span class="fc" id="L225">			oReport += String.format(&quot;Rate of Vaccination: %.2f%%\n&quot;, rate);</span>
+<span class="fc" id="L226">			oReport += String.format(&quot;Number of Days Reported: %,d\n&quot;, numRecord);</span>
+<span class="fc" id="L227">			System.out.println(oReport);</span>
+<span class="fc" id="L228">			return oReport;</span>
+	 }
+ 
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
